@@ -1,3 +1,4 @@
+#cats/models.py
 from django.contrib.auth import get_user_model
 from django.db import models
 
@@ -26,6 +27,14 @@ class Cat(models.Model):
     owner = models.ForeignKey(
         User, related_name='cats', on_delete=models.CASCADE)
     achievements = models.ManyToManyField(Achievement, through='AchievementCat')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['name', 'owner'],
+                name='unique_name_owner'
+            )
+        ]
 
     def __str__(self):
         return self.name
